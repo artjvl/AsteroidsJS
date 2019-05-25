@@ -16,19 +16,19 @@ export default class Vector2 {
         this.__y = y;
     }
     static add(a, b) {
-        return new Vector2(
+        return new this(
             a.__x + b.__x,
             a.__y + b.__y
         );
     }
     static subtract(a, b) {
-        return new Vector2(
+        return new this(
             a.__x - b.__x,
             a.__y - b.__y
         );
     }
     static scale(vector, scalar) {
-        return new Vector2(
+        return new this(
             vector.__x * scalar,
             vector.__y * scalar
         );

@@ -1,5 +1,5 @@
 import Message from "../../client/js/shared/messages/Message.js";
-import Vector2 from "../../client/js/shared/util/vectors/Vector2.js";
+import Vector2 from "../util/vectors/Vector2.js";
 import Entity from "../entity/Entity.js";
 
 export default class User extends Entity {
@@ -15,21 +15,18 @@ export default class User extends Entity {
         });
         socket.on(Message.Keyboard.DOWN, (keyboard) => {
             if (keyboard.key === 'KeyW') {
-                console.log('W');
-                this.setLinAcceleration(100);
+                this.setLinAcceleration(400);
             }
             if (keyboard.key === 'KeyA') {
-                console.log('A');
-                this.setAngAcceleration(-2);
+                this.setAngAcceleration(-12);
             }
             if (keyboard.key === 'KeyD') {
-                console.log('D');
-                this.setAngAcceleration(2);
+                this.setAngAcceleration(12);
             }
         });
         socket.on(Message.Keyboard.UP, (keyboard) => {
             if (keyboard.key === "KeyW") {
-                this.setLinAcceleration(-20);
+                this.setLinAcceleration(0);
             }
             if (keyboard.key === 'KeyA') {
                 this.setAngAcceleration(0);
