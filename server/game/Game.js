@@ -23,8 +23,9 @@ export default class Game {
     }
     _run() {
         setInterval(() => {
+            const delta = this._timer.delta();
             for (const user of this.getUsers()) {
-                user.step(0.001 * this._timer.delta());
+                user.step(0.001 * delta);
                 user.update(this._generateSnapshot());
             }
         }, 20);

@@ -3,6 +3,6 @@ export default class User {
         this.x = x;
         this.y = y;
         this.z = z;
-        this._sprite = sprite;
+        this.sprite = sprite;
     }
 }
