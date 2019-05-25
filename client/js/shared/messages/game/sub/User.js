@@ -1,5 +1,6 @@
 export default class User {
-    constructor(x, y, z, sprite) {
+    constructor(id, x, y, z, sprite) {
+        this.id = id;
         this.x = x;
         this.y = y;
         this.z = z;

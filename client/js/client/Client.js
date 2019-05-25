@@ -15,7 +15,7 @@ export default class Client {
         return document.getElementById("ctx").getContext("2d");
     }
     initSocket(socket) {
-        socket.on(Message.Snapshot.SNAPSHOT, (snapshot) => {
+        socket.on(Message.Game.GAME, (snapshot) => {
             ctx.clearRect(0, 0, 500, 500);
             for (const user of snapshot.users) {
                 img.src = user._sprite;
@@ -24,4 +24,5 @@ export default class Client {
         });
         return socket;
     }
+
 }

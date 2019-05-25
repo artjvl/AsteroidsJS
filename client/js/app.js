@@ -20,9 +20,12 @@ function draw(context, image, x, y, rotation) {
     context.setTransform(1,0,0,1,0,0);
 }
 
-socket.on(Message.Snapshot.SNAPSHOT, (snapshot) => {
+socket.on(Message.Game.GAME, (game) => {
     ctx.clearRect(0, 0, 500, 500);
-    for (const user of snapshot.users) {
+    const player = game.snapshot.users.find((user) => {
+        return user.id === game.player.id;
+    });
+    for (const user of game.snapshot.users) {
         const img = new Image();
         img.src = user.sprite;
         draw(ctx, img, user.x, user.y, user.z);

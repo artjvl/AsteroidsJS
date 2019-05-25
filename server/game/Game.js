@@ -23,23 +23,25 @@ export default class Game {
     }
     _run() {
         setInterval(() => {
-            const delta = this._timer.delta();
+            const snapshot = this._generateSnapshot(),
+                delta = this._timer.delta();
             for (const user of this.getUsers()) {
                 user.step(0.001 * delta);
-                user.update(this._generateSnapshot());
+                user.update(snapshot);
             }
         }, 20);
     }
     _generateSnapshot() {
         const users = Array();
         for (const user of this.getUsers()) {
-            users.push(new Message.User(
+            users.push(new Message.Game.User(
+                user.getId(),
                 user.getPosition().getX(),
                 user.getPosition().getY(),
                 user.getAttitude(),
                 user.getSprite()
             ));
         }
-        return new Message.Snapshot(users);
+        return new Message.Game.Snapshot(users);
     }
 }

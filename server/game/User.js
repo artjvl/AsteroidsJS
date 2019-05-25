@@ -1,5 +1,5 @@
 import Message from "../../client/js/shared/messages/Message.js";
-import Vector2 from "../util/vectors/Vector2.js";
+import Vector2 from "../util/vectors/sub/Vector2.js";
 import Entity from "../entity/Entity.js";
 
 export default class User extends Entity {
@@ -44,7 +44,8 @@ export default class User extends Entity {
         return this._id;
     }
     update(snapshot) {
-        this._socket.emit(Message.Snapshot.SNAPSHOT, snapshot);
+        const player = new Message.Game.Player(this.getId());
+        this._socket.emit(Message.Game.GAME, new Message.Game(snapshot, player));
     }
     getSprite() {
         return this._sprite;

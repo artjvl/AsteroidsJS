@@ -1,5 +1,5 @@
-import Vector2 from "./Vector2.js";
-import Cartesian2 from "./Cartesian2.js";
+import Vector2 from "./sub/Vector2.js";
+import Cartesian2 from "./sub/Cartesian2.js";
 
 export default class Vector {
     static Vector2 = Vector2;
