@@ -12,7 +12,6 @@ document.addEventListener("keyup", function(event) {
 });
 
 const img = new Image();
-img.src = './client/img/ship_coast.png';
 
 function draw(context, image, x, y, rotation) {
     context.setTransform(1, 0, 0, 1, x, y); // sets scale and origin
@@ -24,6 +23,7 @@ function draw(context, image, x, y, rotation) {
 socket.on(Message.Snapshot.SNAPSHOT, (snapshot) => {
     ctx.clearRect(0, 0, 500, 500);
     for (const user of snapshot.users) {
+        img.src = user._sprite;
         draw(ctx, img, user.x, user.y, user.z);
     }
 });

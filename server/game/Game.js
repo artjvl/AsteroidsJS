@@ -1,39 +1,42 @@
 import Message from "../../client/js/shared/messages/Message.js";
+import Timer from "../util/timer/Timer.js";
 
 export default class Game {
     static WIDTH = 1000;
     static HEIGHT = 1000;
     constructor(server) {
-        this.__server = server;
-        this.__users = new Map();
-        this.__run();
+        this._server = server;
+        this._users = new Map();
+        this._timer = new Timer();
+        this._run();
     }
     getUsers() {
-        return this.__users.values();
+        return this._users.values();
     }
     addUser(user) {
-        this.__users.set(user.getId(), user);
+        this._users.set(user.getId(), user);
         console.log("User " + user.getId() + " added.");
     }
     removeUser(user) {
-        this.__users.delete(user.getId());
+        this._users.delete(user.getId());
         console.log("User " + user.getId() + " removed.");
     }
-    __run() {
+    _run() {
         setInterval(() => {
             for (const user of this.getUsers()) {
-                user.step(0.02);
-                user.update(this.__generateSnapshot());
+                user.step(0.001 * this._timer.delta());
+                user.update(this._generateSnapshot());
             }
         }, 20);
     }
-    __generateSnapshot() {
+    _generateSnapshot() {
         const users = Array();
         for (const user of this.getUsers()) {
             users.push(new Message.User(
                 user.getPosition().getX(),
                 user.getPosition().getY(),
-                user.getAttitude()
+                user.getAttitude(),
+                user.getSprite()
             ));
         }
         return new Message.Snapshot(users);

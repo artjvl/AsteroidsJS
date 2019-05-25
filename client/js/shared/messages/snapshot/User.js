@@ -1,7 +1,8 @@
 export default class User {
-    constructor(x, y, z) {
+    constructor(x, y, z, sprite) {
         this.x = x;
         this.y = y;
         this.z = z;
+        this._sprite = sprite;
     }
 }

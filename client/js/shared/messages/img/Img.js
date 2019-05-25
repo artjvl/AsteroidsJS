@@ -1,3 +1,4 @@
 export default class Img {
-    SHIP = './client/img/ship_coast.png';
+    static SHIP_COAST = './client/img/ship_coast.png';
+    static SHIP_THRUST = './client/img/ship_thrust.png';
 }

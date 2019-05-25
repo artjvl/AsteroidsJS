@@ -3,19 +3,21 @@ import Vector2 from "../util/vectors/Vector2.js";
 import Entity from "../entity/Entity.js";
 
 export default class User extends Entity {
+    _sprite = Message.Img.SHIP_COAST;
     constructor(game, socket, id) {
         super(new Vector2(250, 250), 0);
-        this.__game = game;
-        this.__socket = this.init(socket);
-        this.__id = id;
+        this._game = game;
+        this._socket = this.init(socket);
+        this._id = id;
     }
     init(socket) {
         socket.on('disconnect', () => {
-            this.__game.removeUser(this);
+            this._game.removeUser(this);
         });
         socket.on(Message.Keyboard.DOWN, (keyboard) => {
             if (keyboard.key === 'KeyW') {
                 this.setLinAcceleration(this.LINEAR_ACCELERATION);
+                this._sprite = Message.Img.SHIP_THRUST;
             }
             if (keyboard.key === 'KeyA') {
                 this.setAngAcceleration(- this.ANGULAR_ACCELERATION);
@@ -27,6 +29,7 @@ export default class User extends Entity {
         socket.on(Message.Keyboard.UP, (keyboard) => {
             if (keyboard.key === "KeyW") {
                 this.setLinAcceleration(0);
+                this._sprite = Message.Img.SHIP_COAST;
             }
             if (keyboard.key === 'KeyA') {
                 this.setAngAcceleration(0);
@@ -38,9 +41,12 @@ export default class User extends Entity {
         return socket;
     }
     getId() {
-        return this.__id;
+        return this._id;
     }
     update(snapshot) {
-        this.__socket.emit(Message.Snapshot.SNAPSHOT, snapshot);
+        this._socket.emit(Message.Snapshot.SNAPSHOT, snapshot);
+    }
+    getSprite() {
+        return this._sprite;
     }
 }
