@@ -15,13 +15,13 @@ export default class User extends Entity {
         });
         socket.on(Message.Keyboard.DOWN, (keyboard) => {
             if (keyboard.key === 'KeyW') {
-                this.setLinAcceleration(400);
+                this.setLinAcceleration(this.LINEAR_ACCELERATION);
             }
             if (keyboard.key === 'KeyA') {
-                this.setAngAcceleration(-12);
+                this.setAngAcceleration(- this.ANGULAR_ACCELERATION);
             }
             if (keyboard.key === 'KeyD') {
-                this.setAngAcceleration(12);
+                this.setAngAcceleration(this.ANGULAR_ACCELERATION);
             }
         });
         socket.on(Message.Keyboard.UP, (keyboard) => {

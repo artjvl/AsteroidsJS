@@ -1,6 +1,9 @@
 import Vector from "../util/vectors/Vector.js";
 
 export default class Particle {
+    LINEAR_ACCELERATION = 400;
+    ANGULAR_VELOCITY = 4;
+    ANGULAR_ACCELERATION = 12;
     constructor(position, attitude) {
         this._position = position;
         this._linVelocity = new Vector.Cartesian2(0, 0);
@@ -49,7 +52,7 @@ export default class Particle {
         } else {
             velocity = Vector.Cartesian2.scale(
                 this._linVelocity,
-                Math.max(1 - ((400 * timeDelta) / this._linVelocity.magnitude()), 0)
+                Math.max(1 - ((this.LINEAR_ACCELERATION * timeDelta) / this._linVelocity.magnitude()), 0)
             );
         }
         const position = Vector.Cartesian2.add(
@@ -65,14 +68,14 @@ export default class Particle {
     _stepAngular(timeDelta) {
         let velocity;
         if (this._angAcceleration !== 0) {
-            if (Math.abs(this._angVelocity) < 4) {
+            if (Math.abs(this._angVelocity) < this.ANGULAR_VELOCITY) {
                 velocity = this._angVelocity + this._angAcceleration * timeDelta;
             } else {
-                velocity = 4 * (this._angVelocity / Math.abs(this._angVelocity));
+                velocity = this._angVelocity;
             }
 
         } else {
-            velocity = this._angVelocity * Math.max(1 - ((12 * timeDelta) / Math.abs(this._angVelocity)), 0);
+            velocity = this._angVelocity * Math.max(1 - ((this.ANGULAR_ACCELERATION * timeDelta) / Math.abs(this._angVelocity)), 0);
         }
         const attitude = this._attitude + velocity * timeDelta;
         this._angVelocity = velocity;
