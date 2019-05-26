@@ -1,6 +1,6 @@
-import Message from "../../client/js/shared/messages/Message.js";
-import Vector2 from "../util/vectors/sub/Vector2.js";
-import Entity from "../entity/Entity.js";
+import Message from "../../../client/js/shared/messages/Message.js";
+import Vector2 from "../../util/vectors/sub/Vector2.js";
+import Entity from "../Entity.js";
 
 export default class User extends Entity {
     _sprite = Message.Img.SHIP_COAST;

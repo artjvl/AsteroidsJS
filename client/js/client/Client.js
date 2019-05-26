@@ -3,6 +3,7 @@ import Drawer from "../shared/util/drawer/Drawer.js";
 
 export default class Client {
     constructor(document, socket) {
+        this._ctx = document.getElementById("ctx").getContext("2d");
         document.addEventListener('keydown', function(event) {
             socket.emit(Message.Keyboard.DOWN, new Message.Keyboard(event.code));
         });
@@ -10,7 +11,7 @@ export default class Client {
             socket.emit(Message.Keyboard.UP, new Message.Keyboard(event.code));
         });
         socket.on(Message.Game.GAME, (game) => {
-            this.draw(document.getElementById("ctx").getContext("2d"), game);
+            this.draw(this._ctx, game);
         });
     }
     draw(context, game) {
