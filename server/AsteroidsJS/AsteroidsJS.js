@@ -1,7 +1,7 @@
-import Game from "./Game.js";
-import User from "../entity/user/User.js";
+import Game from "./game/Game.js";
+import User from "./entity/player/User.js";
 
-export default class Server {
+export default class AsteroidsJS {
     constructor(sockets) {
         const game = new Game(this);
         sockets.on('connection', function(socket) {

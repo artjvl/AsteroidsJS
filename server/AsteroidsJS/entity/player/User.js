@@ -1,11 +1,11 @@
-import Message from "../../../client/js/shared/messages/Message.js";
-import Vector2 from "../../util/vectors/sub/Vector2.js";
+import Message from "../../../../client/AsteroidsJS/js/message/Message.js";
+import Vector2 from "../../../util/vector/sub/Vector2.js";
 import Entity from "../Entity.js";
 
 export default class User extends Entity {
-    _sprite = Message.Img.SHIP_COAST;
+    _sprite = Message.img.SHIP_COAST;
     constructor(game, socket, id) {
-        super(new Vector2(250, 250), 0);
+        super(new Vector2(250, 250), 20, 0);
         this._game = game;
         this._socket = this.init(socket);
         this._id = id;
@@ -14,27 +14,27 @@ export default class User extends Entity {
         socket.on('disconnect', () => {
             this._game.removeUser(this);
         });
-        socket.on(Message.Keyboard.DOWN, (keyboard) => {
-            if (keyboard.key === 'KeyW') {
+        socket.on(Message.in.keyboard.down.id, (data) => {
+            if (data.key === 'KeyW') {
                 this.setLinAcceleration(this.LINEAR_ACCELERATION);
-                this._sprite = Message.Img.SHIP_THRUST;
+                this._sprite = Message.img.SHIP_THRUST;
             }
-            if (keyboard.key === 'KeyA') {
+            if (data.key === 'KeyA') {
                 this.setAngAcceleration(- this.ANGULAR_ACCELERATION);
             }
-            if (keyboard.key === 'KeyD') {
+            if (data.key === 'KeyD') {
                 this.setAngAcceleration(this.ANGULAR_ACCELERATION);
             }
         });
-        socket.on(Message.Keyboard.UP, (keyboard) => {
-            if (keyboard.key === "KeyW") {
+        socket.on(Message.in.keyboard.up.id, (data) => {
+            if (data.key === "KeyW") {
                 this.setLinAcceleration(0);
-                this._sprite = Message.Img.SHIP_COAST;
+                this._sprite = Message.img.SHIP_COAST;
             }
-            if (keyboard.key === 'KeyA') {
+            if (data.key === 'KeyA') {
                 this.setAngAcceleration(0);
             }
-            if (keyboard.key === 'KeyD') {
+            if (data.key === 'KeyD') {
                 this.setAngAcceleration(0);
             }
         });
@@ -44,8 +44,7 @@ export default class User extends Entity {
         return this._id;
     }
     update(snapshot) {
-        const player = new Message.Game.Player(this.getId());
-        this._socket.emit(Message.Game.GAME, new Message.Game(snapshot, player));
+        this._socket.emit(Message.game.id, Message.game.data(snapshot, this.getId()));
     }
     getSprite() {
         return this._sprite;

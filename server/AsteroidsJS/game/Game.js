@@ -1,5 +1,5 @@
-import Message from "../../client/js/shared/messages/Message.js";
-import Timer from "../util/timer/Timer.js";
+import Message from "../../../client/AsteroidsJS/js/message/Message.js";
+import Timer from "../../util/timer/Timer.js";
 
 export default class Game {
     static WIDTH = 1000;
@@ -34,14 +34,14 @@ export default class Game {
     _generateSnapshot() {
         const users = Array();
         for (const user of this.getUsers()) {
-            users.push(new Message.Game.User(
+            users.push(Message.game.util.entity(
                 user.getId(),
-                user.getPosition().getX(),
-                user.getPosition().getY(),
+                Math.round(user.getPosition().getX()),
+                Math.round(user.getPosition().getY()),
                 user.getAttitude(),
                 user.getSprite()
             ));
         }
-        return new Message.Game.Snapshot(users);
+        return Message.game.util.snapshot(users, [], []);
     }
 }

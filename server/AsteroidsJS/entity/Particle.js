@@ -1,4 +1,4 @@
-import Vector from "../util/vectors/Vector.js";
+import Vector from "../../util/vector/Vector.js";
 
 export default class Particle {
     LINEAR_ACCELERATION = 400;
@@ -40,18 +40,18 @@ export default class Particle {
         this._stepAngular(timeDelta);
     }
     _stepLinear(timeDelta) {
-        let velocity;
+        let velocity = this._linVelocity;
         if (this._linAcceleration > 0) {
             velocity = Vector.Cartesian2.add(
-                this._linVelocity,
+                velocity,
                 Vector.Cartesian2.generate(
                     this._linAcceleration * timeDelta,
                     this._attitude
                 )
             );
-        } else {
+        } else if (this.LINEAR_ACCELERATION > 0) {
             velocity = Vector.Cartesian2.scale(
-                this._linVelocity,
+                velocity,
                 Math.max(1 - ((this.LINEAR_ACCELERATION * timeDelta) / this._linVelocity.magnitude()), 0)
             );
         }
