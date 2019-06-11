@@ -1,4 +1,8 @@
+/**
+ * A bounded rectangular plane used in a quad-tree.
+ */
 export default class Plane {
+
     constructor(x, y, width, height) {
         this._x = x;
         this._y = y;
