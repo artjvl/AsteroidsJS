@@ -14,19 +14,19 @@ export default class Game {
         return this._users.values();
     }
     addUser(user) {
-        this._users.set(user.getId(), user);
-        console.log("User " + user.getId() + " added.");
+        this._users.set(user.entity.getId(), user);
+        console.log("User " + user.entity.getId() + " added.");
     }
     removeUser(user) {
-        this._users.delete(user.getId());
-        console.log("User " + user.getId() + " removed.");
+        this._users.delete(user.entity.getId());
+        console.log("User " + user.entity.getId() + " removed.");
     }
     _run() {
         setInterval(() => {
             const snapshot = this._generateSnapshot(),
                 delta = this._timer.delta();
             for (const user of this.getUsers()) {
-                user.step(0.001 * delta);
+                user.entity.step(0.001 * delta);
                 user.update(snapshot);
             }
         }, 20);
@@ -34,13 +34,7 @@ export default class Game {
     _generateSnapshot() {
         const users = Array();
         for (const user of this.getUsers()) {
-            users.push(Message.game.util.entity(
-                user.getId(),
-                Math.round(user.getPosition().getX()),
-                Math.round(user.getPosition().getY()),
-                user.getAttitude(),
-                user.getSprite()
-            ));
+            users.push(user.entity.generateSnapshot());
         }
         return Message.game.util.snapshot(users, [], []);
     }

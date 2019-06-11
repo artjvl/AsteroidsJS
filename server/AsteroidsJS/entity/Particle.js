@@ -1,20 +1,22 @@
 import Vector from "../../util/vector/Vector.js";
 
 export default class Particle {
-    LINEAR_ACCELERATION = 400;
-    ANGULAR_VELOCITY = 4;
-    ANGULAR_ACCELERATION = 12;
-    constructor(position, attitude) {
+
+    _LINEAR_ACCELERATION;
+    _MAX_ANGULAR_VELOCITY;
+    _ANGULAR_ACCELERATION;
+
+    constructor(position, linVelocity, attitude, angVelocity) {
         this._position = position;
-        this._linVelocity = new Vector.Cartesian2(0, 0);
+        this._linVelocity = linVelocity;
         this._linAcceleration = 0;
         this._attitude = attitude;
-        this._angVelocity = 0;
+        this._angVelocity = angVelocity;
         this._angAcceleration = 0;
     }
 
     /**
-     * Getters and setters.
+     * Public getters and setters.
      */
     getPosition() {
         return this._position;
@@ -25,11 +27,15 @@ export default class Particle {
     getAttitude() {
         return this._attitude;
     }
-    setAttitude(attitude) {
-        this._attitude = (attitude + (2 * Math.PI)) % (2 * Math.PI);
-    }
     setAngAcceleration(angAcceleration) {
         this._angAcceleration = angAcceleration;
+    }
+
+    /**
+     * Private setter.
+     */
+     _setAttitude(attitude) {
+        this._attitude = (attitude + (2 * Math.PI)) % (2 * Math.PI);
     }
 
     /**
@@ -49,10 +55,10 @@ export default class Particle {
                     this._attitude
                 )
             );
-        } else if (this.LINEAR_ACCELERATION > 0) {
+        } else if (this._LINEAR_ACCELERATION > 0) {
             velocity = Vector.Cartesian2.scale(
                 velocity,
-                Math.max(1 - ((this.LINEAR_ACCELERATION * timeDelta) / this._linVelocity.magnitude()), 0)
+                Math.max(1 - ((this._LINEAR_ACCELERATION * timeDelta) / this._linVelocity.magnitude()), 0)
             );
         }
         const position = Vector.Cartesian2.add(
@@ -68,17 +74,17 @@ export default class Particle {
     _stepAngular(timeDelta) {
         let velocity;
         if (this._angAcceleration !== 0) {
-            if (Math.abs(this._angVelocity) < this.ANGULAR_VELOCITY) {
+            if (Math.abs(this._angVelocity) < this._MAX_ANGULAR_VELOCITY) {
                 velocity = this._angVelocity + this._angAcceleration * timeDelta;
             } else {
                 velocity = this._angVelocity;
             }
 
         } else {
-            velocity = this._angVelocity * Math.max(1 - ((this.ANGULAR_ACCELERATION * timeDelta) / Math.abs(this._angVelocity)), 0);
+            velocity = this._angVelocity * Math.max(1 - ((this._ANGULAR_ACCELERATION * timeDelta) / Math.abs(this._angVelocity)), 0);
         }
         const attitude = this._attitude + velocity * timeDelta;
         this._angVelocity = velocity;
-        this.setAttitude(attitude);
+        this._setAttitude(attitude);
     }
 }
