@@ -26,7 +26,7 @@ export default class Game {
             const snapshot = this._generateSnapshot(),
                 delta = this._timer.delta();
             for (const user of this.getUsers()) {
-                user.entity.step(0.001 * delta);
+                user.entity.step(delta);
                 user.update(snapshot);
             }
         }, 20);

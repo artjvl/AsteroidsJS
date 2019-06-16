@@ -13,39 +13,39 @@ export default class Plane {
     /**
      * Private getters and setters.
      */
-    _getXCenter() {
+    _getCenterX() {
         return this._x + 0.5 * this.width;
     }
-    _getYCenter() {
+    _getCenterY() {
         return this._y + 0.5 * this.height;
     }
-    _getXMinus() {
+    _getLeft() {
         return this._x;
     }
-    _setXMinus(x) {
+    _setLeft(x) {
         const delta = this._x - x;
         this._x = x;
         this.width += delta;
     }
-    _getXPlus() {
+    _getRight() {
         return this._x + this.width;
     }
-    _setXPlus(x) {
-        this.width = x - this._getXMinus();
+    _setRight(x) {
+        this.width = x - this._getLeft();
     }
-    _getYMinus() {
+    _getTop() {
         return this._y;
     }
-    _setYMinus(y) {
+    _setTop(y) {
         const delta = this._y - y;
         this._y = y;
         this.height += delta;
     }
-    _getYPlus() {
+    _getBottom() {
         return this._y + this.height;
     }
-    _setYPlus(y) {
-        this.height = y - this._getYMinus();
+    _setBottom(y) {
+        this.height = y - this._getTop();
     }
 
     /**
@@ -58,7 +58,7 @@ export default class Plane {
         return this._covers(new this.constructor(x, y, width, height));
     }
     coversCircle(x, y, radius) {
-        return this._covers(this.createFromCircle(x, y, radius));
+        return this._covers(this.constructor.createFromCircle(x, y, radius));
     }
 
     extendToPoint(x, y) {
@@ -76,19 +76,19 @@ export default class Plane {
             height = 0.5 * this.height;
         switch (num) {
             case 1:
-                return new Plane(this._getXCenter(), this._getYCenter(), width, height);
+                return new Plane(this._getCenterX(), this._getCenterY(), width, height);
             case 2:
-                return new Plane(this._getXMinus(), this._getYCenter(), width, height);
+                return new Plane(this._getLeft(), this._getCenterY(), width, height);
             case 3:
-                return new Plane(this._getXMinus(), this._getYMinus(), width, height);
+                return new Plane(this._getLeft(), this._getTop(), width, height);
             case 4:
-                return new Plane(this._getXCenter(), this._getYMinus(), width, height);
+                return new Plane(this._getCenterX(), this._getTop(), width, height);
         }
     }
     findQuadrant(x, y) {
         console.assert(this.coversPoint(x, y));
-        const xPlus = (x >= this._getXCenter()),
-            yPlus = (y >= this._getYCenter());
+        const xPlus = (x >= this._getCenterX()),
+            yPlus = (y >= this._getCenterY());
         if (xPlus && yPlus) return 1;
         if (!xPlus && yPlus) return 2;
         if (!xPlus && !yPlus) return 3;
@@ -97,8 +97,8 @@ export default class Plane {
 
     draw(context) {
         context.strokeRect(
-            this._getXMinus(),
-            this._getYMinus(),
+            this._getLeft(),
+            this._getTop(),
             this.width,
             this.height
         );
@@ -109,17 +109,17 @@ export default class Plane {
      */
     _covers(plane) {
         return (
-            plane._getXMinus() >= this._getXMinus() &&
-            plane._getXPlus() <= this._getXPlus() &&
-            plane._getYMinus() >= this._getYMinus() &&
-            plane._getYPlus() <= this._getYPlus()
+            plane._getLeft() >= this._getLeft() &&
+            plane._getRight() <= this._getRight() &&
+            plane._getTop() >= this._getTop() &&
+            plane._getBottom() <= this._getBottom()
         );
     }
     _extend(plane) {
-        this._setXMinus(Math.min(plane._getXMinus(), this._getXMinus()));
-        this._setXPlus(Math.max(plane._getXPlus(), this._getXPlus()));
-        this._setYMinus(Math.min(plane._getYMinus(), this._getYMinus()));
-        this._setYPlus(Math.max(plane._getYPlus(), this._getYPlus()));
+        this._setLeft(Math.min(plane._getLeft(), this._getLeft()));
+        this._setRight(Math.max(plane._getRight(), this._getRight()));
+        this._setTop(Math.min(plane._getTop(), this._getTop()));
+        this._setBottom(Math.max(plane._getBottom(), this._getBottom()));
     }
 
     /**

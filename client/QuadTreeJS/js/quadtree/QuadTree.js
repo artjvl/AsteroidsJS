@@ -43,9 +43,12 @@ export default class QuadTree {
     /**
      * Draws the quad-tree on the given context
      * @param context   The context to be drawn on.
+     * @param alpha     The alpha (i.e., opacity) value of the drawing.
      */
-    draw(context) {
+    draw(context, alpha=0.5) {
+        context.globalAlpha = alpha;
         this._root.draw(context);
+        context.globalAlpha = 1.0;
     }
 
     /**
