@@ -1,29 +1,21 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>Title</title>-->
-<!--    <script src="/socket.io/socket.In.js"></script>-->
-<!--    <script>-->
-<!--        const ctx = document.getElementById("ctx").getContext("2d");-->
-<!--        ctx.font = "30px Arial"-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./client/QuadTreeJS/js/app.js" type="module"></script>
+    <link rel="stylesheet" href="./client/styles/styles.css">
+</head>
+<body>
+    <div>
+        <canvas id="ctx" width="800" height="800" style="border:1px solid #000000;"></canvas>
+    </div>
+    <div>
+        <label><input type="checkbox" id="checkbox" value="value">Show Quad-Tree</label>
+        <input type="range" min="1" max="200" value="100" class="slider" id="slider">
+    </div>
+</body>
+</html>
 
-<!--        const socket = io();-->
-<!--        socket.on("NEW_POSITION", function(data) {-->
-<!--           ctx.clearRect(0, 0, 500, 500);-->
-<!--           ctx.fillText('P', data.x, data.y);-->
-<!--        });-->
-<!--    </script>-->
-<!--</head>-->
-<!--<body>-->
-<!--    <canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>-->
-<!--</body>-->
-<!--</html>-->
-
-<canvas id="ctx" width="800" height="800" style="border:1px solid #000000;"></canvas>
-<label><input type="checkbox" id="checkbox" value="value">Show Quad-Tree</label>
-<input type="range" min="1" max="200" value="100" class="slider" id="slider">
-<input type="range" min="0" max="4" value="2" class="slider" id="speed">
 <!--<script src="/socket.io/socket.io.js"></script>-->
 <!--<script src="./client/AsteroidsJS/js/app.js" type="module"></script>-->
-<script src="./client/QuadTreeJS/js/app.js" type="module"></script>
