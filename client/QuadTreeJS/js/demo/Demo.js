@@ -7,6 +7,7 @@ export default class Demo {
     MAX_RADIUS = 24;
     MAX_SPEED = 40;
     _timer = new Timer();
+    _speed = 1;
     constructor(width, height, context, slider, checkbox, cursor) {
         this.width = width;
         this.height = height;
@@ -21,15 +22,17 @@ export default class Demo {
         for (let i = 0; i < slider.max; i++) {
             this._elements.push(this._generateRandomNode(i));
         }
-        // setInterval(() => {this.draw()}, 20)
 
-        window.requestAnimationFrame(this.step);
+        window.requestAnimationFrame(this._step);
     }
-    step = () => {
+    toggle() {
+        this._speed = 1 - this._speed;
+    }
+    _step = () => {
         const elements = this._elements.slice(0, this._slider.value);
 
         // time-step elements
-        const delta = this._timer.delta();
+        const delta = this._speed * this._timer.delta();
         for (const element of elements) {
             element.step(delta);
             element.setX((element.getX() + this.width) % this.width);
@@ -63,9 +66,9 @@ export default class Demo {
             element.setColor('blue');
         }
 
-        this.draw(this._context, elements);
-
-        window.requestAnimationFrame(this.step);
+        // draw frame
+        this._draw(this._context, elements);
+        window.requestAnimationFrame(this._step);
     };
     _collision(a, b) {
         return (
@@ -73,7 +76,7 @@ export default class Demo {
             <= (a.getRadius() + b.getRadius())**2
         );
     }
-    draw(context, elements) {
+    _draw(context, elements) {
         // draw QuadTree
         context.clearRect(0, 0, this.width, this.height);
         if (this._checkbox.checked) {

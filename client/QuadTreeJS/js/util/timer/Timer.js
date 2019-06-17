@@ -24,4 +24,7 @@ export default class Timer {
         this._lastUpdate = now;
         return delta;
     }
+    update() {
+        this._lastUpdate = Date.now();
+    }
 }

@@ -22,5 +22,10 @@ export default class Client {
         canvas.addEventListener("mouseleave", () => {
             cursor.setVisibility(false);
         });
+        document.addEventListener("keyup", (event) => {
+            if (event.key === "Escape") {
+                demo.toggle();
+            }
+        });
     }
 }
