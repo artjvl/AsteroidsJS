@@ -146,7 +146,11 @@ class Leaf extends Node {
     }
 
     find(x, y, radius) {
-        return this._elements;
+        const elements = [];
+        for (const element of this._elements) {
+            elements.push(element.getObject());
+        }
+        return elements;
     }
 
     draw(context) {
@@ -198,7 +202,7 @@ class Inner extends Node {
     find(x, y, radius) {
         let nearby = [];
         for (const child of this._children) {
-            if (child !== null && child._area.coversCircle(x, y, radius)) {
+            if (child !== null && child._area.overlapsCircle(x, y, radius)) {
                 nearby = nearby.concat(child.find(x, y, radius));
             }
         }

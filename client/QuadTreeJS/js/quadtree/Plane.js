@@ -61,6 +61,16 @@ export default class Plane {
         return this._covers(this.constructor.createFromCircle(x, y, radius));
     }
 
+    overlapsPoint(x, y) {
+        return this._overlaps(new this.constructor(x, y, 0, 0));
+    }
+    overlapsPlane(x, y, width, height) {
+        return this._overlaps(new this.constructor(x, y, width, height));
+    }
+    overlapsCircle(x, y, radius) {
+        return this._overlaps(this.constructor.createFromCircle(x, y, radius));
+    }
+
     extendToPoint(x, y) {
         this._extend(new this(x, y, 0, 0));
     }
@@ -113,6 +123,12 @@ export default class Plane {
             plane._getRight() <= this._getRight() &&
             plane._getTop() >= this._getTop() &&
             plane._getBottom() <= this._getBottom()
+        );
+    }
+    _overlaps(plane) {
+        return (
+            Math.abs(plane._getCenterX() - this._getCenterX()) <= 0.5 * (plane.width + this.width) &&
+            Math.abs(plane._getCenterY() - this._getCenterY()) <= 0.5 * (plane.height + this.height)
         );
     }
     _extend(plane) {
