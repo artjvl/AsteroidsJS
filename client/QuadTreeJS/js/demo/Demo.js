@@ -50,7 +50,7 @@ export default class Demo {
         for (const element of elements) {
             const nearby = this._tree.find(element.getX(), element.getY(), element.getRadius());
             for (const neighbour of nearby) {
-                if (neighbour.getId() > element.getId() && this._collision(element, neighbour)) {
+                if (neighbour.getId() > element.getId() && this._checkCollision(element, neighbour)) {
                     element.setColor('red');
                     neighbour.setColor('red');
                 }
@@ -70,7 +70,8 @@ export default class Demo {
         this._draw(this._context, elements);
         window.requestAnimationFrame(this._step);
     };
-    _collision(a, b) {
+
+    _checkCollision(a, b) {
         return (
             Math.abs(a.getX() - b.getX())**2 + Math.abs(a.getY() - b.getY())**2
             <= (a.getRadius() + b.getRadius())**2

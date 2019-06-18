@@ -19,51 +19,63 @@ export default class QuadTree {
 
     /**
      * Inserts a new element to the quad-tree.
-     * @param x         The x-position of the new element.
-     * @param y         The y-position of the new element.
-     * @param radius    The radius of the new element.
-     * @param object    The object linked to the element.
+     * @param {number} x -      The x-position of the new element.
+     * @param {number} y -      The y-position of the new element.
+     * @param {number} radius - The radius of the new element.
+     * @param {Object} object - The object linked to the element.
+     * @returns {QuadTree}
      */
     insert(x, y, radius, object=null) {
         const element = new Element(x, y, radius, object);
         this._root.insert(element);
+        return this;
     }
 
     /**
      * Finds the elements nearby to the circle described by the given parameters.
-     * @param x         The x-position of the circle.
-     * @param y         The y-position of the circle.
-     * @param radius    The radius of the circle.
-     * @returns {*}     The array containing the nearby elements.
+     * @param {number} x -      The x-position of the circle.
+     * @param {number} y -      The y-position of the circle.
+     * @param {number} radius - The radius of the circle.
+     * @returns {Array} The array containing the nearby elements.
      */
     find(x, y, radius=0) {
-        return this._root.find(x, y, radius);
+        const elements = [];
+        for (const element of this._root.find(x, y, radius)) {
+            elements.push(element.getObject());
+        }
+        return elements;
     }
 
     /**
      * Draws the quad-tree on the given context
-     * @param context   The context to be drawn on.
-     * @param alpha     The alpha (i.e., opacity) value of the drawing.
+     * @param {*} context -     The context to be drawn on.
+     * @param {number} alpha -  The alpha (i.e., opacity) value of the drawing.
+     * @returns {QuadTree}
      */
     draw(context, alpha=0.5) {
         context.globalAlpha = alpha;
         this._root.draw(context);
         context.globalAlpha = 1.0;
+        return alpha;
     }
 
     /**
      * Assigns a new node to the quad-tree root.
-     * @param node      The new node.
+     * @param {Node} node -     The new node.
+     * @returns {QuadTree}
      */
     setRoot(node) {
         this._root = node;
+        return this;
     }
 
     /**
      * Clears the quad-tree by replacing the root with a new leaf.
+     * @returns {QuadTree}
      */
     clear() {
         this._root = new Leaf(this, null, 0, new Plane(0, 0, this.width, this.height));
+        return this;
     }
 
     getMaxDepth() {
@@ -91,7 +103,7 @@ class Node {
 
     /**
      * Inserts an element this node.
-     * @param element   The element to be inserted.
+     * @param {Element} element -   The element to be inserted.
      */
     insert(element) {
         throw new TypeError("Subclasses must implement insert()!");
@@ -99,9 +111,9 @@ class Node {
 
     /**
      * Finds the elements nearby to the circle described by the given parameters.
-     * @param x         The x-position of the circle.
-     * @param y         The y-position of the circle.
-     * @param radius    The radius of the circle.
+     * @param {number} x -          The x-position of the circle.
+     * @param {number} y -          The y-position of the circle.
+     * @param {number} radius -     The radius of the circle.
      */
     find(x, y, radius) {
         throw new TypeError("Subclasses must implement find()!");
@@ -109,71 +121,10 @@ class Node {
 
     /**
      * Draws the node on the given context.
-     * @param context   The context to be drawn on.
+     * @param {*} context -     The context to be drawn on.
      */
     draw(context) {
         this._area.draw(context);
-    }
-}
-
-
-/**
- * A leaf-node of the loose quad-tree.
- */
-class Leaf extends Node {
-
-    _elements = [];
-
-    constructor(tree, parent, depth, bounds) {
-        super(tree, parent, depth, bounds);
-    }
-
-    insert(element) {
-        console.assert(this._bounds.coversPoint(element.getX(), element.getY()));
-
-        // modifies node area to contain the inserted element
-        if (this._area === null) {
-            this._area = Plane.createFromCircle(element.getX(), element.getY(), element.getRadius());
-        } else {
-            this._area.extendToCircle(element.getX(), element.getY(), element.getRadius());
-        }
-
-        // adds the element to the tree
-        this._elements.push(element);
-        if (this._elements.length > this._tree.getMaxSize() && this._depth < this._tree.getMaxDepth()) {
-            this._convert();
-        }
-    }
-
-    find(x, y, radius) {
-        const elements = [];
-        for (const element of this._elements) {
-            elements.push(element.getObject());
-        }
-        return elements;
-    }
-
-    draw(context) {
-        super.draw(context);
-        for (const element of this._elements) {
-            element.draw(context);
-        }
-    }
-
-    /**
-     * Converts this inner-node to a leaf-node.
-     * @private
-     */
-    _convert() {
-        const inner = new Inner(this._tree, this._parent, this._depth, this._bounds, this._area);
-        for (const element of this._elements) {
-            inner.insert(element);
-        }
-        if (this._parent === null) {
-            this._tree.setRoot(inner);
-        } else {
-            this._parent._setNode(this, inner);
-        }
     }
 }
 
@@ -220,7 +171,7 @@ class Inner extends Node {
 
     /**
      * Delegates insertion of the given element to a child node.
-     * @param element   The element to be delegated.
+     * @param {Element} element -   The element to be delegated.
      * @private
      */
     _delegate(element) {
@@ -233,7 +184,7 @@ class Inner extends Node {
 
     /**
      * Expands this node by 'giving birth' to a child.
-     * @param quadrant  The quadrant at which the child should reside.
+     * @param {number} quadrant -   The quadrant at which the child should reside.
      * @private
      */
     _expand(quadrant) {
@@ -250,8 +201,8 @@ class Inner extends Node {
 
     /**
      * Replaces a child node {@code old} by another {@code replacement}.
-     * @param old           The child node that is replaced.
-     * @param replacement   The replacement node.
+     * @param {Node} old            The child node that is replaced.
+     * @param {Node} replacement -  The replacement node.
      * @private
      */
     _setNode(old, replacement) {
@@ -259,6 +210,62 @@ class Inner extends Node {
             if (this._children[i] === old) {
                 this._children[i] = replacement;
             }
+        }
+    }
+}
+
+/**
+ * A leaf-node of the loose quad-tree.
+ */
+class Leaf extends Node {
+
+    _elements = [];
+
+    constructor(tree, parent, depth, bounds) {
+        super(tree, parent, depth, bounds);
+    }
+
+    insert(element) {
+        console.assert(this._bounds.coversPoint(element.getX(), element.getY()));
+
+        // modifies node area to contain the inserted element
+        if (this._area === null) {
+            this._area = Plane.createFromCircle(element.getX(), element.getY(), element.getRadius());
+        } else {
+            this._area.extendToCircle(element.getX(), element.getY(), element.getRadius());
+        }
+
+        // adds the element to the tree
+        this._elements.push(element);
+        if (this._elements.length > this._tree.getMaxSize() && this._depth < this._tree.getMaxDepth()) {
+            this._convert();
+        }
+    }
+
+    find(x, y, radius) {
+        return this._elements;
+    }
+
+    draw(context) {
+        super.draw(context);
+        for (const element of this._elements) {
+            element.draw(context);
+        }
+    }
+
+    /**
+     * Converts this inner-node to a leaf-node.
+     * @private
+     */
+    _convert() {
+        const inner = new Inner(this._tree, this._parent, this._depth, this._bounds, this._area);
+        for (const element of this._elements) {
+            inner.insert(element);
+        }
+        if (this._parent === null) {
+            this._tree.setRoot(inner);
+        } else {
+            this._parent._setNode(this, inner);
         }
     }
 }
